@@ -11,7 +11,13 @@ module.exports = (grunt) ->
         ext: '.js'
         sourceMap: true
         sourceMapDir: 'maps'
+    copy:
+      assets:
+        expand: true
+        src: 'assets/**/*'
+        dest: 'dist/'
   grunt.loadNpmTasks 'grunt-contrib-coffee'
+  grunt.loadNpmTasks 'grunt-contrib-copy'
   grunt.registerTask 'manifest', 'Generates manifest.json for Chrome', () ->
     done = @async()
     pkg = require './package.json'
@@ -31,4 +37,4 @@ module.exports = (grunt) ->
     fs.writeFile (path.join __dirname, 'dist', 'manifest.json'), (JSON.stringify manifest, null, 2), (err) ->
       if err? then done false else done true
 
-  grunt.registerTask 'default', ['coffee:compile', 'manifest']
+  grunt.registerTask 'default', ['coffee:compile', 'manifest', 'copy']
