@@ -18,11 +18,13 @@ module.exports = (grunt) ->
         dest: 'dist/'
   grunt.loadNpmTasks 'grunt-contrib-coffee'
   grunt.loadNpmTasks 'grunt-contrib-copy'
+  String.prototype.toTitleCase = ->
+    @replace /\w\S*/g, (txt) -> (txt.charAt 0).toUpperCase() + (txt.substr 1).toLowerCase()
   grunt.registerTask 'manifest', 'Generates manifest.json for Chrome', () ->
     done = @async()
     pkg = require './package.json'
     manifest =
-      name: pkg.name
+      name: (pkg.name.replace '-', ' ').toTitleCase().replace 'Classhub', 'ClassHub'
       description: pkg.description
       version: pkg.version
       manifest_version: 2
