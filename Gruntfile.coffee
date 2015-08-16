@@ -9,15 +9,35 @@ module.exports = (grunt) ->
         src: '**/*.coffee'
         dest: 'dist/'
         ext: '.js'
-        sourceMap: true
-        sourceMapDir: 'maps'
+        options:
+          sourceMap: true
+          sourceMapDir: 'maps'
     copy:
       assets:
         expand: true
         src: 'assets/**/*'
         dest: 'dist/'
+      html:
+        expand: true
+        cwd: 'src'
+        src: '**/*.html'
+        dest: 'dist/'
+    less:
+      compile:
+        expand: true
+        flatten: false
+        cwd: 'src'
+        src: '**/*.less'
+        dest: 'dist/'
+        ext: '.css'
+        options:
+          sourceMap: true
+          outputSourceFiles: true
+          sourceMapFileInline: true
+
   grunt.loadNpmTasks 'grunt-contrib-coffee'
   grunt.loadNpmTasks 'grunt-contrib-copy'
+  grunt.loadNpmTasks 'grunt-contrib-less'
   String.prototype.toTitleCase = ->
     @replace /\w\S*/g, (txt) -> (txt.charAt 0).toUpperCase() + (txt.substr 1).toLowerCase()
   grunt.registerTask 'manifest', 'Generates manifest.json for Chrome', () ->
@@ -39,4 +59,4 @@ module.exports = (grunt) ->
     fs.writeFile (path.join __dirname, 'dist', 'manifest.json'), (JSON.stringify manifest, null, 2), (err) ->
       if err? then done false else done true
 
-  grunt.registerTask 'default', ['coffee:compile', 'manifest', 'copy']
+  grunt.registerTask 'default', ['coffee', 'manifest', 'copy', 'less']
